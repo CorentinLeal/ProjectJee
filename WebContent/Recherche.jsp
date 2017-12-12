@@ -5,12 +5,12 @@
 <%@ page import="cleal.projet.Livre"%>
 
 <%
-	String uid = null;
-	if (session.getAttribute("uid") != null) {
-		uid = session.getAttribute("uid").toString();
+	String login = null;
+	if (session.getAttribute("login") != null) {
+		login = session.getAttribute("login").toString();
 	}
 
-	ArrayList<Livre> results = (ArrayList<Livre>) request.getAttribute("results");
+	ArrayList<Livre> results = (ArrayList<Livre>) request.getAttribute("recherche-results");
 %>
 
 
@@ -21,9 +21,13 @@
 <title>Recherche</title>
 </head>
 <body>
+
+	<jsp:include page="nav.jsp"/>
+
 	<h1>Recherche</h1>
-	<form action="recherche" method="get">
-		<label for="auteur">Auteur :</label><input type="text" name="auteur"
+	<form action="bibliotheque?elem=recherche" method="POST">
+		<input name="form" value="recherche" type="hidden" /> <label
+			for="auteur">Auteur :</label><input type="text" name="auteur"
 			value="<%=request.getParameter("auteur") == null ? "" : request.getParameter("auteur")%>">
 		<label for="titre">Titre :</label><input type="text" name="titre"
 			value="<%=request.getParameter("titre") == null ? "" : request.getParameter("titre")%>">
@@ -32,24 +36,40 @@
 
 
 	<h1>Résultats :</h1>
-	<ul class="list-results">
+	<ul>
 
 		<%
 			if (results != null) {
 				for (Livre livreResult : results) {
 		%>
-		<li class="result">
+		<li>
 
-			<div class="auteur"><%=livreResult.getAuteur()%></div>
-			<div class="titre"><%=livreResult.getTitre()%></div>
-			<div class="nbrTotal"><%=livreResult.getNbrTotal()%></div>
-			<div class="nbrEmprunte"><%=livreResult.getNbrEmprunte()%></div>
-
+			<div>
+				Auteur :
+				<%=livreResult.getAuteur()%></div>
+			<div>
+				Titre :
+				<%=livreResult.getTitre()%></div>
+			<div>
+				Nombre d'exemplaires total :
+				<%=livreResult.getNbrTotal()%></div>
+			<div>
+				Nombre d'exemplaires empruntés :
+				<%=livreResult.getNbrEmprunte()%></div> <%
+ 	if (livreResult.getNbrTotal() - livreResult.getNbrEmprunte() > 0
+ 					&& session.getAttribute("login") != null) {
+ %>
+			<form action="bibliotheque?elem=recherche" method="post">
+				<input name="form" value="recherche_reserv" type="hidden"> <input
+					name="livre" value="<%=livreResult.getId()%>" type="hidden">
+				<button type="submit">Réserver</button>
+			</form> <%
+ 	}
+ %>
 		</li>
-
 		<%
 			}
-				}
+			}
 		%>
 	</ul>
 </body>

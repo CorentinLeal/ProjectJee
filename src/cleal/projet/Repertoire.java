@@ -7,18 +7,22 @@ import java.util.Map.Entry;
 
 public class Repertoire {
 
-	private static HashMap<Integer, Livre> listeLivres;
+	private static HashMap<Integer, Livre> listeLivres = new HashMap<>();
 
 	public Repertoire() {
 		Repertoire.listeLivres = new HashMap<>();
 	}
 
 	public static void addLivre(Livre livre) {
-		Repertoire.listeLivres.put(livre.getId(), livre);
+		listeLivres.put(livre.getId(), livre);
 	}
 
-	public Livre getLivre(int id) {
+	public static Livre getLivre(int id) {
 		return listeLivres.get(id);
+	}
+
+	public static void deleteLivre(int id) {
+		listeLivres.remove(id);
 	}
 
 	public static ArrayList<Livre> getLivreParAuteur(String auteur) {

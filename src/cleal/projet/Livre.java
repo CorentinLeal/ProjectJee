@@ -57,7 +57,18 @@ public class Livre {
 	public int getNbrEmprunte() {
 		return nbrEmprunte;
 	}
-	
-	
+
+	public void updateNbrExemplaires(int modifier) {
+		if (modifier >= 0) {
+			this.nbrTotal += modifier;
+		} else {
+			if (Math.abs(modifier) <= this.nbrTotal - this.nbrEmprunte) {
+				this.nbrTotal+=modifier;
+			} else {
+				this.nbrTotal= this.nbrEmprunte;
+			}
+
+		}
+	}
 
 }
